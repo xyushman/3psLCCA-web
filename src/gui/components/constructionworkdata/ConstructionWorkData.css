@@ -111,11 +111,11 @@
 /* ── Section fieldset (bordered box with label) ──────────────────────────── */
 
 .cwd-section {
-    border: 1px solid #4a4a4a; /* Matches screenshot border */
+    border: 1px solid var(--app-border-mid); /* Matches theme border */
     border-radius: 4px;
     margin-bottom: 20px;
     background-color: transparent;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, border-color 0.3s;
     padding: 10px; /* Some padding around the table */
 }
 
@@ -127,6 +127,7 @@
     color: var(--app-text-primary);
     background-color: var(--app-bg-main); /* Cut out the border */
     line-height: 1;
+    transition: color 0.3s, background-color 0.3s;
 }
 
 /* ── Material table ──────────────────────────────────────────────────────── */
@@ -134,10 +135,11 @@
 .cwd-table-wrapper {
     overflow-x: auto;
     min-height: 80px;
-    background-color: #2b2b2b; /* Matches screenshot table background */
-    border: 1px solid #333;
+    background-color: var(--app-bg-card); /* Matches theme table background */
+    border: 1px solid var(--app-border-mid);
     border-radius: 4px;
     margin-bottom: 8px; /* Space before "Add Material" button */
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .cwd-table {
@@ -147,7 +149,8 @@
 }
 
 .cwd-table thead tr {
-    background-color: #383838; /* Matches screenshot header background */
+    background-color: var(--app-bg-alt); /* Matches theme header background */
+    transition: background-color 0.3s;
 }
 
 .cwd-table th {
@@ -155,9 +158,10 @@
     font-weight: 500;
     color: var(--app-text-primary);
     text-align: center;
-    border-bottom: 1px solid #222; /* Darker border under header */
-    border-right: 1px solid #444; /* Column dividers */
+    border-bottom: 1px solid var(--app-border-dark); /* Darker border under header */
+    border-right: 1px solid var(--app-border-mid); /* Column dividers */
     white-space: nowrap;
+    transition: border-color 0.3s, color 0.3s;
 }
 
 .cwd-table th:last-child {
@@ -170,10 +174,11 @@
 
 .cwd-table td {
     padding: 6px 8px;
-    border-bottom: 1px solid #3a3a3a; /* Row dividers */
-    border-right: 1px solid #3a3a3a; /* Column dividers */
+    border-bottom: 1px solid var(--app-border-light); /* Row dividers */
+    border-right: 1px solid var(--app-border-light); /* Column dividers */
     vertical-align: middle;
     text-align: center;
+    transition: border-color 0.3s;
 }
 
 .cwd-table td:last-child {
@@ -189,7 +194,7 @@
 }
 
 .cwd-table tbody tr:hover {
-    background-color: #333; /* Slight highlight */
+    background-color: var(--app-bg-alt); /* Slight highlight */
 }
 
 /* ── Table inputs ────────────────────────────────────────────────────────── */
@@ -204,12 +209,12 @@
     font-size: 0.85rem;
     outline: none;
     box-sizing: border-box;
-    transition: border-color 0.15s, background-color 0.15s;
+    transition: border-color 0.15s, background-color 0.15s, color 0.15s;
 }
 
 .cwd-cell-input:focus {
-    border-color: #555;
-    background-color: #222;
+    border-color: var(--app-primary-accent);
+    background-color: var(--app-input-bg);
 }
 
 .cwd-cell-total {
@@ -217,6 +222,7 @@
     color: var(--app-text-primary);
     font-weight: 500;
     padding: 4px 6px;
+    transition: color 0.3s;
 }
 
 /* ── Delete row button ───────────────────────────────────────────────────── */
@@ -224,7 +230,7 @@
 .cwd-delete-btn {
     background: none;
     border: none;
-    color: #888;
+    color: var(--app-text-muted);
     cursor: pointer;
     font-size: 1.1rem;
     padding: 2px 6px;
@@ -245,16 +251,16 @@
     padding: 8px;
     font-size: 0.85rem;
     text-align: center;
-    background-color: #2b2b2b; /* Matches table background */
-    border: 1px solid #333;
+    background-color: var(--app-bg-card); /* Matches table background */
+    border: 1px solid var(--app-border-mid);
     border-radius: 4px;
     color: var(--app-text-primary);
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .cwd-add-material-btn:hover {
-    background-color: #383838;
+    background-color: var(--app-bg-alt);
 }
 
 /* ── Add component section button ────────────────────────────────────────── */
@@ -264,14 +270,14 @@
     font-size: 0.82rem;
     font-weight: 500;
     border-radius: 4px;
-    border: 1px solid #4a4a4a;
+    border: 1px solid var(--app-border-mid);
     background-color: transparent;
     color: var(--app-text-primary);
     cursor: pointer;
     margin-top: 10px;
-    transition: background 0.2s, color 0.2s;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .cwd-add-section-btn:hover {
-    background-color: #383838;
+    background-color: var(--app-bg-alt);
 }
