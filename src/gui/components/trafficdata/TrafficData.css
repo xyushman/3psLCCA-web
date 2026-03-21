@@ -1,0 +1,299 @@
+/* ── TrafficData Form Styles ──────────────────────────────────────────────────
+   Uses the CSS custom properties defined in index.css (:root variables).
+   Mirrors BridgeData.css / FinancialData.css conventions — td- prefix.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.td-wrapper {
+    padding: 24px;
+    color: var(--app-text-primary);
+    overflow-y: auto;
+    max-height: 100%;
+    transition: color 0.3s ease;
+}
+
+/* ── Section header ──────────────────────────────────────────────────────── */
+
+.td-section-header {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--app-text-primary);
+    border-bottom: 1px solid var(--app-border-dark);
+    padding-bottom: 8px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+}
+
+.td-section-header:first-child {
+    margin-top: 0;
+}
+
+/* ── Field group ─────────────────────────────────────────────────────────── */
+
+.td-field-group {
+    margin-bottom: 16px;
+}
+
+.td-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--app-text-secondary);
+    margin-bottom: 4px;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.td-required-star {
+    color: #e74c3c;
+}
+
+.td-hint {
+    font-size: 0.8rem;
+    color: var(--app-text-muted);
+    margin-bottom: 8px;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+/* ── Custom dropdown (shared with BridgeData pattern) ────────────────────── */
+
+.td-input {
+    width: 100%;
+    background-color: var(--app-input-bg);
+    border: 1px solid var(--app-input-border);
+    border-radius: 4px;
+    color: var(--app-text-primary);
+    padding: 7px 10px;
+    font-size: 0.875rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.15s, background-color 0.3s, color 0.3s;
+}
+
+.td-input:focus {
+    border-color: var(--app-primary-accent);
+}
+
+.td-input--error {
+    border-color: #e74c3c !important;
+}
+
+.td-dropdown {
+    position: relative;
+}
+
+.td-dropdown-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    cursor: pointer;
+    user-select: none;
+}
+
+.td-dropdown-placeholder {
+    color: var(--app-text-muted);
+}
+
+.td-dropdown-arrow {
+    font-size: 0.75rem;
+    color: var(--app-text-muted);
+    margin-left: 8px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    display: inline-block;
+}
+
+.td-dropdown-arrow--open {
+    transform: rotate(180deg);
+}
+
+.td-dropdown-list {
+    position: absolute;
+    top: calc(100% + 3px);
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background-color: var(--app-bg-card);
+    border: 1px solid var(--app-input-border);
+    border-radius: 4px;
+    max-height: 250px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 4px 0;
+    list-style: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.td-dropdown-item {
+    padding: 6px 10px;
+    font-size: 0.875rem;
+    color: var(--app-text-primary);
+    cursor: pointer;
+    transition: background-color 0.12s;
+}
+
+.td-dropdown-item:hover {
+    background-color: var(--app-bg-alt);
+}
+
+.td-dropdown-item--selected {
+    background-color: var(--app-accent-bg, rgba(115, 165, 175, 0.15));
+    color: var(--app-primary-accent);
+    font-weight: 600;
+}
+
+.td-dropdown-item--placeholder {
+    color: var(--app-text-muted);
+    font-style: italic;
+}
+
+
+.td-input-with-unit {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background-color: var(--app-input-bg);
+    border: 1px solid var(--app-input-border);
+    border-radius: 4px;
+    transition: border-color 0.15s, background-color 0.3s;
+    overflow: hidden;
+}
+
+.td-input-with-unit:focus-within {
+    border-color: var(--app-primary-accent);
+}
+
+.td-cost-input-inner {
+    flex: 1;
+    min-width: 0;
+    color: var(--app-text-primary);
+    background-color: transparent;
+    border: none;
+    padding: 7px 10px;
+    font-size: 0.875rem;
+    outline: none;
+}
+
+.td-unit {
+    font-size: 0.8rem;
+    color: var(--app-text-muted);
+    white-space: nowrap;
+    pointer-events: none;
+    padding-right: 12px;
+    padding-left: 8px;
+}
+
+/* ── Rich text editor ────────────────────────────────────────────────────── */
+
+.td-rte-wrapper {
+    border: 1px solid var(--app-input-border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+}
+
+.td-rte-wrapper:focus-within {
+    border-color: var(--app-primary-accent);
+}
+
+.td-rte-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 6px 8px;
+    background-color: var(--app-bg-alt);
+    border-bottom: 1px solid var(--app-border-light);
+}
+
+.td-rte-btn {
+    padding: 3px 7px;
+    font-size: 0.8rem;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    color: var(--app-text-secondary);
+    cursor: pointer;
+    transition: background-color 0.12s, border-color 0.12s, color 0.12s;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.td-rte-btn:hover {
+    background-color: var(--app-bg-card);
+    border-color: var(--app-border-mid);
+    color: var(--app-text-primary);
+}
+
+.td-rte-btn--active {
+    background-color: var(--app-border-light);
+    border-color: var(--app-border-mid);
+    color: var(--app-text-primary);
+}
+
+.td-rte-divider {
+    width: 1px;
+    background-color: var(--app-border-mid);
+    margin: 2px 3px;
+    align-self: stretch;
+}
+
+.td-rte-body {
+    min-height: 160px;
+    padding: 10px 12px;
+    font-size: 0.875rem;
+    color: var(--app-text-primary);
+    background-color: var(--app-input-bg);
+    outline: none;
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.td-rte-body:empty::before {
+    content: attr(data-placeholder);
+    color: var(--app-text-muted);
+    pointer-events: none;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+
+.td-btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    margin-bottom: 10px;
+}
+
+.td-btn {
+    padding: 8px 20px;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    border: 1px solid var(--app-border-mid);
+    cursor: pointer;
+    font-weight: 500;
+    min-height: 35px;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.td-btn--clear {
+    background-color: var(--app-bg-alt);
+    color: var(--app-text-secondary);
+}
+
+.td-btn--clear:hover {
+    background-color: var(--app-border-light);
+    color: var(--app-text-primary);
+}
+
+/* ── Error message ───────────────────────────────────────────────────────── */
+
+.td-error-msg {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    border-radius: 4px;
+    padding: 8px 12px;
+    line-height: 1.5;
+}

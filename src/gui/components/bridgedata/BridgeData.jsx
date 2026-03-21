@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { data as countriesData } from '../utils/countriesdata';
+import './BridgeData.css';
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
@@ -56,130 +57,24 @@ const REQUIRED_KEYS = new Set([
     'service_life',
 ]);
 
-// ── Styles ────────────────────────────────────────────────────────────────────
-
-const styles = {
-    wrapper: {
-        padding: '24px',
-        color: 'var(--app-text-primary)',
-        overflowY: 'auto',
-        maxHeight: '100%',
-        transition: 'color 0.3s ease'
-    },
-    sectionHeader: {
-        fontSize: '0.75rem',
-        fontWeight: '700',
-        color: 'var(--app-text-muted)',
-        letterSpacing: '0.06em',
-        textTransform: 'uppercase',
-        borderBottom: '1px solid var(--app-border-dark)',
-        paddingBottom: '6px',
-        marginTop: '24px',
-        marginBottom: '16px',
-        transition: 'all 0.3s ease'
-    },
-    fieldGroup: {
-        marginBottom: '16px',
-    },
-    label: {
-        fontSize: '0.875rem',
-        fontWeight: '600',
-        color: 'var(--app-text-secondary)',
-        marginBottom: '4px',
-        display: 'block',
-        transition: 'color 0.3s ease'
-    },
-    hint: {
-        fontSize: '0.775rem',
-        color: 'var(--app-text-muted)',
-        marginBottom: '6px',
-        lineHeight: '1.4',
-        transition: 'color 0.3s ease'
-    },
-    input: {
-        width: '100%',
-        backgroundColor: 'var(--app-input-bg)',
-        border: '1px solid var(--app-input-border)',
-        borderRadius: '4px',
-        color: 'var(--app-text-primary)',
-        padding: '7px 10px',
-        fontSize: '0.875rem',
-        outline: 'none',
-        boxSizing: 'border-box',
-        transition: 'border-color 0.15s, background-color 0.3s, color 0.3s',
-    },
-    inputError: {
-        border: '1px solid #e74c3c',
-    },
-    inputRow: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-    },
-    unit: {
-        fontSize: '0.8rem',
-        color: 'var(--app-text-muted)',
-        whiteSpace: 'nowrap',
-        flexShrink: 0,
-        transition: 'color 0.3s ease'
-    },
-    docsLink: {
-        fontSize: '0.75rem',
-        color: 'var(--app-primary-accent)',
-        textDecoration: 'none',
-        marginLeft: '4px',
-        flexShrink: 0,
-        transition: 'color 0.3s ease'
-    },
-    btnRow: {
-        display: 'flex',
-        gap: '10px',
-        marginTop: '24px',
-        marginBottom: '10px',
-    },
-    btn: {
-        flex: 1,
-        padding: '8px 0',
-        fontSize: '0.875rem',
-        borderRadius: '4px',
-        border: '1px solid var(--app-border-mid)',
-        cursor: 'pointer',
-        fontWeight: '500',
-        minHeight: '35px',
-        transition: 'background 0.3s, color 0.3s, border-color 0.3s',
-    },
-    btnClear: {
-        backgroundColor: 'var(--app-bg-alt)',
-        color: 'var(--app-text-secondary)',
-    },
-    errorMsg: {
-        marginTop: '12px',
-        fontSize: '0.8rem',
-        color: '#e74c3c',
-        backgroundColor: 'rgba(231, 76, 60, 0.1)',
-        border: '1px solid rgba(231, 76, 60, 0.3)',
-        borderRadius: '4px',
-        padding: '8px 12px',
-        lineHeight: '1.5',
-    },
-};
+// ── Styles are in BridgeData.css ─────────────────────────────────────────────
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 function SectionHeader({ title }) {
-    return <div style={styles.sectionHeader}>{title}</div>;
+    return <div className="bd-section-header">{title}</div>;
 }
 
 function FieldHint({ text, docSlug }) {
     return (
-        <div style={styles.hint}>
+        <div className="bd-hint">
             {text}
             {docSlug && (
                 <a
                     href={`${BASE_DOCS_URL}${docSlug}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={styles.docsLink}
+                    className="bd-docs-link"
                     title="View documentation"
                 >
                     ⓘ
@@ -191,9 +86,9 @@ function FieldHint({ text, docSlug }) {
 
 function TextField({ id, label, hint, docSlug, required, value, onChange, hasError }) {
     return (
-        <div style={styles.fieldGroup}>
-            <label htmlFor={id} style={styles.label}>
-                {label}{required && <span style={{ color: '#e74c3c' }}> *</span>}
+        <div className="bd-field-group">
+            <label htmlFor={id} className="bd-label">
+                {label}{required && <span className="bd-required-star"> *</span>}
             </label>
             <FieldHint text={hint} docSlug={docSlug} />
             <input
@@ -201,52 +96,85 @@ function TextField({ id, label, hint, docSlug, required, value, onChange, hasErr
                 type="text"
                 value={value}
                 onChange={(e) => onChange(id, e.target.value)}
-                style={{ ...styles.input, ...(hasError ? styles.inputError : {}) }}
-                onFocus={(e) => (e.target.style.borderColor = 'var(--app-primary-accent)')}
-                onBlur={(e) => (e.target.style.borderColor = hasError ? '#e74c3c' : 'var(--app-input-border)')}
+                className={`bd-input${hasError ? ' bd-input--error' : ''}`}
             />
         </div>
     );
 }
 
 function SelectField({ id, label, hint, docSlug, required, options, value, onChange, hasError }) {
+    const [open, setOpen] = useState(false);
+    const ref = useRef(null);
+
+    // Close when clicking outside
+    useEffect(() => {
+        if (!open) return;
+        const handler = (e) => {
+            if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, [open]);
+
+    const select = (opt) => {
+        onChange(id, opt);
+        setOpen(false);
+    };
+
     return (
-        <div style={styles.fieldGroup}>
-            <label htmlFor={id} style={styles.label}>
-                {label}{required && <span style={{ color: '#e74c3c' }}> *</span>}
+        <div className="bd-field-group">
+            <label className="bd-label">
+                {label}{required && <span className="bd-required-star"> *</span>}
             </label>
             <FieldHint text={hint} docSlug={docSlug} />
-            <select
-                id={id}
-                value={value}
-                onChange={(e) => onChange(id, e.target.value)}
-                style={{
-                    ...styles.input,
-                    ...(hasError ? styles.inputError : {}),
-                    appearance: 'auto',
-                }}
-                onFocus={(e) => (e.target.style.borderColor = 'var(--app-primary-accent)')}
-                onBlur={(e) => (e.target.style.borderColor = hasError ? '#e74c3c' : 'var(--app-input-border)')}
-            >
-                <option value="">— Select —</option>
-                {options.map((opt) => (
-                    <option key={opt} value={opt}>
-                        {opt}
-                    </option>
-                ))}
-            </select>
+            <div className="bd-dropdown" ref={ref}>
+                <button
+                    type="button"
+                    id={id}
+                    className={`bd-dropdown-trigger bd-input${hasError ? ' bd-input--error' : ''}`}
+                    onClick={() => setOpen((o) => !o)}
+                    aria-haspopup="listbox"
+                    aria-expanded={open}
+                >
+                    <span className={value ? '' : 'bd-dropdown-placeholder'}>
+                        {value || '— Select —'}
+                    </span>
+                    <span className={`bd-dropdown-arrow${open ? ' bd-dropdown-arrow--open' : ''}`}>▾</span>
+                </button>
+                {open && (
+                    <ul className="bd-dropdown-list" role="listbox">
+                        <li
+                            className="bd-dropdown-item bd-dropdown-item--placeholder"
+                            onClick={() => select('')}
+                        >
+                            — Select —
+                        </li>
+                        {options.map((opt) => (
+                            <li
+                                key={opt}
+                                role="option"
+                                aria-selected={value === opt}
+                                className={`bd-dropdown-item${value === opt ? ' bd-dropdown-item--selected' : ''}`}
+                                onClick={() => select(opt)}
+                            >
+                                {opt}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
         </div>
     );
 }
 
 function NumberField({ id, label, hint, docSlug, required, min, max, step, unit, value, onChange, hasError }) {
     return (
-        <div style={styles.fieldGroup}>
-            <label htmlFor={id} style={styles.label}>
-                {label}{required && <span style={{ color: '#e74c3c' }}> *</span>}
+        <div className="bd-field-group">
+            <label htmlFor={id} className="bd-label">
+                {label}{required && <span className="bd-required-star"> *</span>}
             </label>
             <FieldHint text={hint} docSlug={docSlug} />
-            <div style={styles.inputRow}>
+            <div className={`bd-input-row${hasError ? ' bd-input-row--error' : ''}`}>
                 <input
                     id={id}
                     type="number"
@@ -255,11 +183,9 @@ function NumberField({ id, label, hint, docSlug, required, min, max, step, unit,
                     step={step || 1}
                     value={value}
                     onChange={(e) => onChange(id, e.target.value)}
-                    style={{ ...styles.input, ...(hasError ? styles.inputError : {}) }}
-                    onFocus={(e) => (e.target.style.borderColor = 'var(--app-primary-accent)')}
-                    onBlur={(e) => (e.target.style.borderColor = hasError ? '#e74c3c' : 'var(--app-input-border)')}
+                    className="bd-input-inner"
                 />
-                {unit && <span style={styles.unit}>{unit}</span>}
+                {unit && <span className="bd-unit">{unit}</span>}
             </div>
         </div>
     );
@@ -325,7 +251,7 @@ const BridgeData = ({ controller }) => {
     // ── Render ───────────────────────────────────────────────────────────────────
 
     return (
-        <div style={styles.wrapper}>
+        <div className="bd-wrapper">
             {/* ── Bridge Identification ───────────────────────────────────────── */}
             <SectionHeader title="Bridge Identification" />
 
@@ -565,18 +491,10 @@ const BridgeData = ({ controller }) => {
             />
 
             {/* ── Buttons ─────────────────────────────────────────────────────── */}
-            <div style={styles.btnRow}>
+            <div className="bd-btn-row">
                 <button
-                    style={{ ...styles.btn, ...styles.btnClear }}
+                    className="bd-btn bd-btn--clear"
                     onClick={handleClearAll}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'var(--app-border-light)';
-                        e.currentTarget.style.color = 'var(--app-text-primary)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'var(--app-bg-alt)';
-                        e.currentTarget.style.color = 'var(--app-text-secondary)';
-                    }}
                 >
                     Clear All
                 </button>
@@ -584,7 +502,7 @@ const BridgeData = ({ controller }) => {
 
             {/* Validation message */}
             {validationMsg && (
-                <div style={styles.errorMsg}>
+                <div className="bd-error-msg">
                     ⚠ {validationMsg}
                 </div>
             )}
