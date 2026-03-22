@@ -1,283 +1,43 @@
-/* ── Construction Work Data — Shared Styles ───────────────────────────────────
-   cwd- prefix. Used by ConstructionWorkData.jsx and all sub-components.
-   ─────────────────────────────────────────────────────────────────────────── */
+/* ── ConstructionWorkData Form Styles (Bootstrap Overrides) ─────────────────────────── */
 
-/* ── Page header ─────────────────────────────────────────────────────────── */
-
-.cwd-page {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-    background-color: var(--app-bg-main);
-    color: var(--app-text-primary);
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    transition: background-color 0.3s, color 0.3s;
+.form-control,
+.form-select {
+    background-color: var(--app-input-bg) !important;
+    border-color: var(--app-input-border) !important;
+    color: var(--app-text-primary) !important;
+    transition: all 0.3s;
 }
 
-.cwd-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 14px 20px 10px;
-    border-bottom: 1px solid var(--app-border-light);
-    background-color: var(--app-bg-card);
-    flex-shrink: 0;
+.input-group-text {
+    background-color: var(--app-input-bg) !important;
+    border-color: var(--app-input-border) !important;
+    color: var(--app-text-secondary) !important;
+    transition: all 0.3s;
 }
 
-.cwd-header-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--app-text-primary);
-    margin: 0;
-    line-height: 1.3;
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--app-input-bg) !important;
+    border-color: var(--app-primary-accent) !important;
+    color: var(--app-text-primary) !important;
+    box-shadow: 0 0 0 0.2rem var(--app-accent-bg, rgba(115, 165, 175, 0.25)) !important;
 }
 
-.cwd-header-sub {
-    font-size: 0.78rem;
-    color: var(--app-text-muted);
-    margin-top: 2px;
+.form-control:disabled,
+.form-control[readonly] {
+    background-color: var(--app-bg-alt) !important;
+    opacity: 1 !important;
 }
 
-.cwd-header-sub span {
-    color: var(--app-primary-accent);
-    font-weight: 600;
+.form-control::placeholder {
+    color: var(--app-text-muted) !important;
+    font-style: italic !important;
 }
 
-.cwd-header-actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.cwd-action-btn {
-    padding: 5px 14px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    border-radius: 4px;
-    border: 1px solid var(--app-border-mid);
-    background-color: var(--app-bg-alt);
-    color: var(--app-text-secondary);
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-}
-
-.cwd-action-btn:hover {
-    background-color: var(--app-border-light);
-    color: var(--app-text-primary);
-}
-
-/* ── Tab bar ─────────────────────────────────────────────────────────────── */
-
-.cwd-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--app-border-light);
-    background-color: var(--app-bg-card);
-    flex-shrink: 0;
-    padding: 0 16px;
-}
-
-.cwd-tab {
-    padding: 8px 16px;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--app-text-secondary);
-    cursor: pointer;
-    border: none;
-    background: none;
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap;
-}
-
-.cwd-tab:hover {
-    color: var(--app-text-primary);
-}
-
-.cwd-tab--active {
-    color: var(--app-primary-accent);
-    border-bottom-color: var(--app-primary-accent);
-    font-weight: 600;
-}
-
-/* ── Content scroll area ─────────────────────────────────────────────────── */
-
-.cwd-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px 20px;
-}
-
-/* ── Section fieldset (bordered box with label) ──────────────────────────── */
-
-.cwd-section {
-    border: 1px solid var(--app-border-mid); /* Matches theme border */
-    border-radius: 4px;
-    margin-bottom: 20px;
-    background-color: transparent;
-    transition: background-color 0.3s, border-color 0.3s;
-    padding: 10px; /* Some padding around the table */
-}
-
-.cwd-section-legend {
-    margin-left: 10px;
-    padding: 0 4px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--app-text-primary);
-    background-color: var(--app-bg-main); /* Cut out the border */
-    line-height: 1;
-    transition: color 0.3s, background-color 0.3s;
-}
-
-/* ── Material table ──────────────────────────────────────────────────────── */
-
-.cwd-table-wrapper {
-    overflow-x: auto;
-    min-height: 80px;
-    background-color: var(--app-bg-card); /* Matches theme table background */
-    border: 1px solid var(--app-border-mid);
-    border-radius: 4px;
-    margin-bottom: 8px; /* Space before "Add Material" button */
-    transition: background-color 0.3s, border-color 0.3s;
-}
-
-.cwd-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-}
-
-.cwd-table thead tr {
-    background-color: var(--app-bg-alt); /* Matches theme header background */
-    transition: background-color 0.3s;
-}
-
-.cwd-table th {
-    padding: 10px 10px;
-    font-weight: 500;
-    color: var(--app-text-primary);
-    text-align: center;
-    border-bottom: 1px solid var(--app-border-dark); /* Darker border under header */
-    border-right: 1px solid var(--app-border-mid); /* Column dividers */
-    white-space: nowrap;
-    transition: border-color 0.3s, color 0.3s;
-}
-
-.cwd-table th:last-child {
-    border-right: none;
-}
-
-.cwd-table th:first-child {
-    text-align: left;
-}
-
-.cwd-table td {
-    padding: 6px 8px;
-    border-bottom: 1px solid var(--app-border-light); /* Row dividers */
-    border-right: 1px solid var(--app-border-light); /* Column dividers */
-    vertical-align: middle;
-    text-align: center;
-    transition: border-color 0.3s;
-}
-
-.cwd-table td:last-child {
-    border-right: none;
-}
-
-.cwd-table td:first-child {
-    text-align: left;
-}
-
-.cwd-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.cwd-table tbody tr:hover {
-    background-color: var(--app-bg-alt); /* Slight highlight */
-}
-
-/* ── Table inputs ────────────────────────────────────────────────────────── */
-
-.cwd-cell-input {
-    width: 100%;
-    background-color: transparent;
-    border: 1px solid transparent;
-    border-radius: 3px;
-    color: var(--app-text-primary);
-    padding: 4px 6px;
-    font-size: 0.85rem;
-    outline: none;
-    box-sizing: border-box;
-    transition: border-color 0.15s, background-color 0.15s, color 0.15s;
-}
-
-.cwd-cell-input:focus {
-    border-color: var(--app-primary-accent);
-    background-color: var(--app-input-bg);
-}
-
-.cwd-cell-total {
-    font-size: 0.85rem;
-    color: var(--app-text-primary);
-    font-weight: 500;
-    padding: 4px 6px;
-    transition: color 0.3s;
-}
-
-/* ── Delete row button ───────────────────────────────────────────────────── */
-
-.cwd-delete-btn {
-    background: none;
-    border: none;
-    color: var(--app-text-muted);
-    cursor: pointer;
-    font-size: 1.1rem;
-    padding: 2px 6px;
-    border-radius: 3px;
-    transition: color 0.2s, background-color 0.2s;
-    line-height: 1;
-}
-
-.cwd-delete-btn:hover {
-    color: #e74c3c;
-    background-color: rgba(231, 76, 60, 0.1);
-}
-
-/* ── Add material button ─────────────────────────────────────────────────── */
-
-.cwd-add-material-btn {
-    width: 100%;
-    padding: 8px;
-    font-size: 0.85rem;
-    text-align: center;
-    background-color: var(--app-bg-card); /* Matches table background */
-    border: 1px solid var(--app-border-mid);
-    border-radius: 4px;
-    color: var(--app-text-primary);
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-}
-
-.cwd-add-material-btn:hover {
-    background-color: var(--app-bg-alt);
-}
-
-/* ── Add component section button ────────────────────────────────────────── */
-
-.cwd-add-section-btn {
-    padding: 6px 14px;
-    font-size: 0.82rem;
-    font-weight: 500;
-    border-radius: 4px;
-    border: 1px solid var(--app-border-mid);
-    background-color: transparent;
-    color: var(--app-text-primary);
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-}
-
-.cwd-add-section-btn:hover {
-    background-color: var(--app-bg-alt);
+/* Table Overrides for Theme Support */
+.table {
+    --bs-table-bg: transparent !important;
+    --bs-table-color: var(--app-text-primary) !important;
+    color: var(--app-text-primary) !important;
+    border-color: var(--app-border-light) !important;
 }

@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import '../ConstructionWorkData.css';
+import MaterialTable from '../MaterialTable';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -14,12 +15,6 @@ const emptyRow = () => ({
     source: '',
 });
 
-const calcTotal = (row) => {
-    const r = parseFloat(row.rate) || 0;
-    const q = parseFloat(row.qty) || 0;
-    return (r * q).toFixed(2);
-};
-
 // ── Default sections for Foundation ──────────────────────────────────────────
 
 const DEFAULT_SECTIONS = [
@@ -28,101 +23,7 @@ const DEFAULT_SECTIONS = [
     { id: 'pile-cap',   name: 'Pile Cap',   rows: [] },
 ];
 
-// ── MaterialTable sub-component ───────────────────────────────────────────────
-
-function MaterialTable({ section, onRowChange, onRowDelete, onAddRow }) {
-    return (
-        <fieldset className="cwd-section">
-            <legend className="cwd-section-legend">{section.name}</legend>
-            <div className="cwd-table-wrapper">
-                <table className="cwd-table">
-                    <thead>
-                        <tr>
-                            <th style={{ width: '35%' }}>Work Name</th>
-                            <th style={{ width: '13%' }}>Rate</th>
-                            <th style={{ width: '10%' }}>Qty</th>
-                            <th style={{ width: '20%' }}>Source</th>
-                            <th style={{ width: '13%' }}>Total</th>
-                            <th style={{ width: '9%'  }}>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {section.rows.length === 0 ? (
-                            <tr>
-                                <td colSpan={6} style={{ textAlign: 'center', color: 'var(--app-text-muted)', padding: '18px', fontStyle: 'italic', fontSize: '0.78rem' }}>
-                                    No items yet. Click "Add Material" below.
-                                </td>
-                            </tr>
-                        ) : (
-                            section.rows.map((row) => (
-                                <tr key={row.id}>
-                                    <td>
-                                        <input
-                                            className="cwd-cell-input"
-                                            type="text"
-                                            value={row.workName}
-                                            placeholder="Work name..."
-                                            onChange={(e) => onRowChange(section.id, row.id, 'workName', e.target.value)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            className="cwd-cell-input"
-                                            type="number"
-                                            min={0}
-                                            step={0.01}
-                                            value={row.rate}
-                                            placeholder="0.00"
-                                            onChange={(e) => onRowChange(section.id, row.id, 'rate', e.target.value)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            className="cwd-cell-input"
-                                            type="number"
-                                            min={0}
-                                            step={0.01}
-                                            value={row.qty}
-                                            placeholder="0"
-                                            onChange={(e) => onRowChange(section.id, row.id, 'qty', e.target.value)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            className="cwd-cell-input"
-                                            type="text"
-                                            value={row.source}
-                                            placeholder="Source..."
-                                            onChange={(e) => onRowChange(section.id, row.id, 'source', e.target.value)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <span className="cwd-cell-total">{calcTotal(row)}</span>
-                                    </td>
-                                    <td>
-                                        <button
-                                            className="cwd-delete-btn"
-                                            title="Delete row"
-                                            onClick={() => onRowDelete(section.id, row.id)}
-                                        >
-                                            ✕
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            </div>
-            <button
-                className="cwd-add-material-btn"
-                onClick={() => onAddRow(section.id)}
-            >
-                Add Material to {section.name}
-            </button>
-        </fieldset>
-    );
-}
+// (MaterialTable imported from shared component)
 
 // ── Foundation main component ─────────────────────────────────────────────────
 
@@ -153,12 +54,12 @@ const Foundation = ({ controller }) => {
         );
     }, []);
 
-    const handleAddRow = useCallback((sectionId) => {
+    const handleAddRow = useCallback((sectionId, newRowData) => {
         setSections((prev) =>
             prev.map((sec) =>
                 sec.id !== sectionId ? sec : {
                     ...sec,
-                    rows: [...sec.rows, emptyRow()],
+                    rows: [...sec.rows, { id: uid(), ...newRowData }],
                 }
             )
         );
@@ -184,7 +85,13 @@ const Foundation = ({ controller }) => {
                 />
             ))}
 
-            <button className="cwd-add-section-btn" onClick={handleAddSection}>
+            <button
+                className="btn btn-sm mt-3"
+                style={{ backgroundColor: 'transparent', color: 'var(--app-text-primary)', border: '1px solid var(--app-border-mid)', transition: 'background-color 0.2s', fontWeight: 500 }}
+                onClick={handleAddSection}
+                onMouseEnter={(e) => { e.target.style.backgroundColor = 'var(--app-bg-alt)'; }}
+                onMouseLeave={(e) => { e.target.style.backgroundColor = 'transparent'; }}
+            >
                 + Add Component Section
             </button>
         </div>

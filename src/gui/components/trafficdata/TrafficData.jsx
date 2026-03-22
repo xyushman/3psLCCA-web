@@ -29,23 +29,23 @@ function Dropdown({ id, options, value, onChange, placeholder = '— Select —'
     const select = (opt) => { onChange(opt); setOpen(false); };
 
     return (
-        <div className="td-dropdown" ref={ref}>
+        <div className="position-relative" ref={ref}>
             <button
                 type="button"
                 id={id}
-                className="td-input td-dropdown-trigger"
+                className="form-control d-flex align-items-center justify-content-between text-start"
                 onClick={() => setOpen((o) => !o)}
                 aria-haspopup="listbox"
                 aria-expanded={open}
             >
-                <span className={value ? '' : 'td-dropdown-placeholder'}>
+                <span className={value ? '' : 'text-muted fst-italic'}>
                     {value || placeholder}
                 </span>
-                <span className={`td-dropdown-arrow${open ? ' td-dropdown-arrow--open' : ''}`}>▾</span>
+                <span className="text-muted ms-2" style={{ fontSize: '0.75rem', transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }}>▾</span>
             </button>
             {open && (
-                <ul className="td-dropdown-list" role="listbox">
-                    <li className="td-dropdown-item td-dropdown-item--placeholder" onClick={() => select('')}>
+                <ul className="dropdown-menu show w-100 p-1 shadow-sm" role="listbox" style={{ maxHeight: '250px', overflowY: 'auto', backgroundColor: 'var(--app-bg-card)', borderColor: 'var(--app-input-border)' }}>
+                    <li className="dropdown-item text-muted fst-italic" style={{ cursor: 'pointer', fontSize: '0.875rem' }} onClick={() => select('')}>
                         {placeholder}
                     </li>
                     {options.map((opt) => (
@@ -53,8 +53,16 @@ function Dropdown({ id, options, value, onChange, placeholder = '— Select —'
                             key={opt}
                             role="option"
                             aria-selected={value === opt}
-                            className={`td-dropdown-item${value === opt ? ' td-dropdown-item--selected' : ''}`}
+                            className={`dropdown-item ${value === opt ? 'active fw-bold' : ''}`}
+                            style={{
+                                cursor: 'pointer',
+                                fontSize: '0.875rem',
+                                backgroundColor: value === opt ? 'var(--app-accent-bg, rgba(115, 165, 175, 0.15))' : 'transparent',
+                                color: value === opt ? 'var(--app-primary-accent)' : 'var(--app-text-primary)'
+                            }}
                             onClick={() => select(opt)}
+                            onMouseEnter={(e) => { if (value !== opt) e.target.style.backgroundColor = 'var(--app-bg-alt)'; }}
+                            onMouseLeave={(e) => { if (value !== opt) e.target.style.backgroundColor = 'transparent'; }}
                         >
                             {opt}
                         </li>
@@ -69,19 +77,19 @@ function Dropdown({ id, options, value, onChange, placeholder = '— Select —'
 
 function RoadUserCostField({ value, onChange }) {
     return (
-        <div className="td-field-group">
-            <label className="td-label">Road User Cost per Day</label>
-            <div className="td-input-with-unit">
+        <div className="mb-4">
+            <label className="fw-bold mb-1 d-block" style={{ fontSize: '0.9rem', color: 'var(--app-text-secondary)', transition: 'color 0.3s' }}>Road User Cost per Day</label>
+            <div className="input-group">
                 <input
                     type="number"
                     min={0}
                     step={0.01}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    className="td-cost-input-inner"
+                    className="form-control"
                     placeholder="0.00"
                 />
-                <span className="td-unit">/ day</span>
+                <span className="input-group-text border-start-0" style={{ fontSize: '0.8rem', backgroundColor: 'var(--app-input-bg)', borderColor: 'var(--app-input-border)' }}>/ day</span>
             </div>
         </div>
     );
@@ -180,20 +188,20 @@ function RichTextEditor({ value, onChange }) {
     ];
 
     return (
-        <div className="td-field-group">
-            <label className="td-label">Remarks / Notes</label>
-            <div className="td-rte-wrapper">
-                <div className="td-rte-toolbar">
+        <div className="mb-4">
+            <label className="fw-bold mb-1 d-block" style={{ fontSize: '0.9rem', color: 'var(--app-text-secondary)', transition: 'color 0.3s' }}>Remarks / Notes</label>
+            <div className="border rounded td-rte-wrapper" style={{ borderColor: 'var(--app-input-border)', backgroundColor: 'var(--app-input-bg)' }}>
+                <div className="d-flex flex-wrap align-items-center gap-1 p-2 border-bottom" style={{ borderColor: 'var(--app-input-border)', backgroundColor: 'var(--app-bg-alt)' }}>
                     {TOOLBAR.map((btn, i) =>
                         btn === null
-                            ? <div key={`div-${i}`} className="td-rte-divider" />
+                            ? <div key={`div-${i}`} style={{ width: '1px', height: '16px', backgroundColor: 'var(--app-border-mid)', margin: '0 4px' }} />
                             : (
                                 <button
                                     key={btn.label}
                                     type="button"
                                     title={btn.title}
-                                    className="td-rte-btn"
-                                    style={btn.style}
+                                    className="btn btn-sm btn-light border-0 px-2 py-1 text-muted td-rte-btn"
+                                    style={{ ...btn.style, fontSize: '0.8rem', backgroundColor: 'transparent' }}
                                     onMouseDown={(e) => { e.preventDefault(); btn.action(); }}
                                 >
                                     {btn.label}
@@ -203,7 +211,8 @@ function RichTextEditor({ value, onChange }) {
                 </div>
                 <div
                     ref={editorRef}
-                    className="td-rte-body"
+                    className="p-2 td-rte-body"
+                    style={{ minHeight: '120px', color: 'var(--app-text-primary)' }}
                     contentEditable
                     suppressContentEditableWarning
                     data-placeholder="Add notes or remarks here. These will appear in the generated report."
@@ -274,13 +283,13 @@ const TrafficData = ({ controller }) => {
     // ── Render ────────────────────────────────────────────────────────────────
 
     return (
-        <div className="td-wrapper">
-            <div className="td-section-header">Traffic Parameters</div>
+        <div style={{ padding: '24px', color: 'var(--app-text-primary)' }}>
+            <h5 className="mb-4 fw-bold pb-2 mt-4" style={{ borderBottom: '1px solid var(--app-border-dark)', fontSize: '1rem', color: 'var(--app-text-primary)', transition: 'all 0.3s' }}>Traffic Parameters</h5>
 
             {/* Calculation Mode */}
-            <div className="td-field-group">
-                <label htmlFor="calc_mode" className="td-label">
-                    Calculation Mode <span className="td-required-star">*</span>
+            <div className="mb-4">
+                <label htmlFor="calc_mode" className="fw-bold mb-1 d-block" style={{ fontSize: '0.9rem', color: 'var(--app-text-secondary)', transition: 'color 0.3s' }}>
+                    Calculation Mode <span className="text-danger">*</span>
                 </label>
                 <Dropdown
                     id="calc_mode"
@@ -289,7 +298,7 @@ const TrafficData = ({ controller }) => {
                     onChange={handleModeChange}
                 />
                 {errors.has('calculation_mode') && (
-                    <div style={{ fontSize: '0.78rem', color: '#e74c3c', marginTop: '4px' }}>
+                    <div className="invalid-feedback d-block mt-1" style={{ fontSize: '0.78rem' }}>
                         Calculation mode is required.
                     </div>
                 )}
@@ -302,14 +311,20 @@ const TrafficData = ({ controller }) => {
             <RichTextEditor value={form.remarks} onChange={handleRemarksChange} />
 
             {/* Buttons */}
-            <div className="td-btn-row">
-                <button className="td-btn td-btn--clear" onClick={handleClearAll}>
+            <div className="d-flex mt-4 mb-3">
+                <button
+                    className="btn w-100"
+                    style={{ backgroundColor: 'var(--app-bg-alt)', color: 'var(--app-text-secondary)', border: '1px solid var(--app-border-mid)' }}
+                    onClick={handleClearAll}
+                    onMouseEnter={(e) => { e.target.style.backgroundColor = 'var(--app-border-light)'; e.target.style.color = 'var(--app-text-primary)'; }}
+                    onMouseLeave={(e) => { e.target.style.backgroundColor = 'var(--app-bg-alt)'; e.target.style.color = 'var(--app-text-secondary)'; }}
+                >
                     Clear All
                 </button>
             </div>
 
             {validationMsg && (
-                <div className="td-error-msg">⚠ {validationMsg}</div>
+                <div className="alert alert-danger p-2" style={{ fontSize: '0.8rem' }} role="alert">⚠ {validationMsg}</div>
             )}
         </div>
     );

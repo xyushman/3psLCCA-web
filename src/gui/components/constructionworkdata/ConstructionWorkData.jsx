@@ -30,40 +30,64 @@ const ConstructionWorkData = ({ controller, projectName = 'Active Analysis', ini
     };
 
     return (
-        <div className="cwd-page">
+        <div className="d-flex flex-column h-100 overflow-hidden" style={{ backgroundColor: 'var(--app-bg-main)', color: 'var(--app-text-primary)' }}>
             {/* Header */}
-            <div className="cwd-header">
+            <div className="d-flex align-items-start justify-content-between border-bottom" style={{ padding: '14px 20px 10px', backgroundColor: 'var(--app-bg-card)', borderColor: 'var(--app-border-light) !important', flexShrink: 0 }}>
                 <div>
-                    <div className="cwd-header-title">Structure Management</div>
-                    <div className="cwd-header-sub">
-                        Project: <span>{projectName}</span>
+                    <h5 className="m-0 fw-bold" style={{ fontSize: '0.95rem', color: 'var(--app-text-primary)' }}>Structure Management</h5>
+                    <div className="text-muted mt-1" style={{ fontSize: '0.78rem' }}>
+                        Project: <span className="fw-bold" style={{ color: 'var(--app-primary-accent)' }}>{projectName}</span>
                     </div>
                 </div>
-                <div className="cwd-header-actions">
-                    <button className="cwd-action-btn" onClick={handleUploadExcel}>
+                <div className="d-flex align-items-center gap-2">
+                    <button
+                        className="btn btn-sm"
+                        style={{ backgroundColor: 'var(--app-bg-alt)', color: 'var(--app-text-secondary)', border: '1px solid var(--app-border-mid)' }}
+                        onClick={handleUploadExcel}
+                        onMouseEnter={(e) => { e.target.style.backgroundColor = 'var(--app-border-light)'; e.target.style.color = 'var(--app-text-primary)'; }}
+                        onMouseLeave={(e) => { e.target.style.backgroundColor = 'var(--app-bg-alt)'; e.target.style.color = 'var(--app-text-secondary)'; }}
+                    >
                         Upload Excel
                     </button>
-                    <button className="cwd-action-btn" onClick={handleTrash}>
+                    <button
+                        className="btn btn-sm"
+                        style={{ backgroundColor: 'var(--app-bg-alt)', color: 'var(--app-text-secondary)', border: '1px solid var(--app-border-mid)' }}
+                        onClick={handleTrash}
+                        onMouseEnter={(e) => { e.target.style.backgroundColor = 'var(--app-border-light)'; e.target.style.color = 'var(--app-text-primary)'; }}
+                        onMouseLeave={(e) => { e.target.style.backgroundColor = 'var(--app-bg-alt)'; e.target.style.color = 'var(--app-text-secondary)'; }}
+                    >
                         Trash
                     </button>
                 </div>
             </div>
 
             {/* Tab bar */}
-            <div className="cwd-tabs">
-                {TABS.map((tab) => (
-                    <button
-                        key={tab.key}
-                        className={`cwd-tab${activeTab === tab.key ? ' cwd-tab--active' : ''}`}
-                        onClick={() => setActiveTab(tab.key)}
-                    >
-                        {tab.label}
-                    </button>
-                ))}
+            <div className="d-flex border-bottom px-3" style={{ backgroundColor: 'var(--app-bg-card)', borderColor: 'var(--app-border-light) !important', flexShrink: 0 }}>
+                {TABS.map((tab) => {
+                    const isActive = activeTab === tab.key;
+                    return (
+                        <button
+                            key={tab.key}
+                            className={`btn rounded-0 px-3 py-2 border-0 fw-medium ${isActive ? 'fw-bold' : ''}`}
+                            style={{
+                                color: isActive ? 'var(--app-primary-accent)' : 'var(--app-text-secondary)',
+                                borderBottom: isActive ? '2px solid var(--app-primary-accent)' : '2px solid transparent',
+                                fontSize: '0.82rem',
+                                whiteSpace: 'nowrap',
+                                backgroundColor: 'transparent'
+                            }}
+                            onClick={() => setActiveTab(tab.key)}
+                            onMouseEnter={(e) => { if (!isActive) e.target.style.color = 'var(--app-text-primary)'; }}
+                            onMouseLeave={(e) => { if (!isActive) e.target.style.color = 'var(--app-text-secondary)'; }}
+                        >
+                            {tab.label}
+                        </button>
+                    );
+                })}
             </div>
 
             {/* Active tab content */}
-            <div className="cwd-content">
+            <div className="flex-grow-1 overflow-auto p-3 p-md-4">
                 <ActiveComponent controller={controller} />
             </div>
         </div>

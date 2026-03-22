@@ -1,178 +1,32 @@
-/* ── FinancialData Form Styles ────────────────────────────────────────────────
-   Uses the CSS custom properties defined in index.css (:root variables).
-   ─────────────────────────────────────────────────────────────────────────── */
+/* ── FinancialData Form Styles (Bootstrap Overrides) ─────────────────────────── */
 
-.fd-wrapper {
-    padding: 24px;
-    color: var(--app-text-primary);
-    overflow-y: auto;
-    max-height: 100%;
-    transition: color 0.3s ease;
+.form-control, .form-select {
+    background-color: var(--app-input-bg) !important;
+    border-color: var(--app-input-border) !important;
+    color: var(--app-text-primary) !important;
+    transition: all 0.3s;
 }
 
-/* ── Section header ──────────────────────────────────────────────────────── */
-
-.fd-section-header {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--app-text-primary);
-    border-bottom: 1px solid var(--app-border-dark);
-    padding-bottom: 8px;
-    margin-top: 0;
-    margin-bottom: 16px;
-    transition: all 0.3s ease;
+.input-group-text {
+    background-color: var(--app-input-bg) !important;
+    border-color: var(--app-input-border) !important;
+    color: var(--app-text-secondary) !important;
+    transition: all 0.3s;
 }
 
-/* ── Field group ─────────────────────────────────────────────────────────── */
-
-.fd-field-group {
-    margin-bottom: 16px;
+.form-control:focus, .form-select:focus {
+    background-color: var(--app-input-bg) !important;
+    border-color: var(--app-primary-accent) !important;
+    color: var(--app-text-primary) !important;
+    box-shadow: 0 0 0 0.2rem var(--app-accent-bg, rgba(115, 165, 175, 0.25)) !important;
 }
 
-.fd-label {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--app-text-secondary);
-    margin-bottom: 4px;
-    display: block;
-    transition: color 0.3s ease;
+.form-control:disabled, .form-control[readonly] {
+    background-color: var(--app-bg-alt) !important;
+    opacity: 1 !important;
 }
 
-.fd-required-star {
-    color: #e74c3c;
-}
-
-.fd-hint {
-    font-size: 0.8rem;
-    color: var(--app-text-muted);
-    margin-bottom: 8px;
-    line-height: 1.4;
-    transition: color 0.3s ease;
-}
-
-.fd-docs-link {
-    font-size: 0.75rem;
-    color: var(--app-primary-accent);
-    text-decoration: none;
-    margin-left: 4px;
-    flex-shrink: 0;
-    transition: color 0.3s ease;
-}
-
-/* ── Inputs ──────────────────────────────────────────────────────────────── */
-
-.fd-input {
-    width: 100%;
-    background-color: var(--app-input-bg);
-    border: 1px solid var(--app-input-border);
-    border-radius: 4px;
-    color: var(--app-text-primary);
-    padding: 7px 10px;
-    font-size: 0.875rem;
-    outline: none;
-    box-sizing: border-box;
-    transition: border-color 0.15s, background-color 0.3s, color 0.3s;
-}
-
-.fd-input:focus {
-    border-color: var(--app-primary-accent);
-}
-
-.fd-input--error {
-    border-color: #e74c3c !important;
-}
-
-/* ── Input row (input + unit label) ─────────────────────────────────────── */
-
-.fd-input-row {
-    display: flex;
-    align-items: center;
-    background-color: var(--app-input-bg);
-    border: 1px solid var(--app-input-border);
-    border-radius: 4px;
-    transition: border-color 0.15s, background-color 0.3s;
-    overflow: hidden;
-}
-
-.fd-input-row:focus-within {
-    border-color: var(--app-primary-accent);
-}
-
-.fd-input-row--error {
-    border-color: #e74c3c !important;
-}
-
-.fd-input-inner {
-    flex: 1;
-    min-width: 0;
-    color: var(--app-text-primary);
-    background-color: transparent;
-    border: none;
-    padding: 7px 10px;
-    font-size: 0.875rem;
-    outline: none;
-}
-
-.fd-unit {
-    font-size: 0.8rem;
-    color: var(--app-text-muted);
-    white-space: nowrap;
-    pointer-events: none;
-    padding-right: 12px;
-    padding-left: 8px;
-    transition: color 0.3s ease;
-}
-
-/* ── Buttons ─────────────────────────────────────────────────────────────── */
-
-.fd-btn-row {
-    display: flex;
-    gap: 10px;
-    margin-top: 24px;
-    margin-bottom: 10px;
-}
-
-.fd-btn {
-    flex: 1;
-    padding: 8px 0;
-    font-size: 0.875rem;
-    border-radius: 4px;
-    border: 1px solid var(--app-border-mid);
-    cursor: pointer;
-    font-weight: 500;
-    min-height: 35px;
-    transition: background 0.3s, color 0.3s, border-color 0.3s;
-}
-
-.fd-btn--suggested {
-    background-color: var(--app-primary-accent);
-    color: var(--app-text-inverse);
-    border-color: var(--app-primary-accent);
-}
-
-.fd-btn--suggested:hover {
-    opacity: 0.88;
-}
-
-.fd-btn--clear {
-    background-color: var(--app-bg-alt);
-    color: var(--app-text-secondary);
-}
-
-.fd-btn--clear:hover {
-    background-color: var(--app-border-light);
-    color: var(--app-text-primary);
-}
-
-/* ── Error / validation message ──────────────────────────────────────────── */
-
-.fd-error-msg {
-    margin-top: 12px;
-    font-size: 0.8rem;
-    color: #e74c3c;
-    background-color: rgba(231, 76, 60, 0.1);
-    border: 1px solid rgba(231, 76, 60, 0.3);
-    border-radius: 4px;
-    padding: 8px 12px;
-    line-height: 1.5;
+.form-control::placeholder {
+    color: var(--app-text-muted) !important;
+    font-style: italic !important;
 }

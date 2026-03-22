@@ -113,19 +113,24 @@ const REQUIRED_KEYS = new Set(
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 function SectionHeader({ title }) {
-    return <div className="fd-section-header">{title}</div>;
+    return (
+        <h5 className="mb-4 fw-bold pb-2 mt-4" style={{ borderBottom: '1px solid var(--app-border-dark)', fontSize: '1rem', color: 'var(--app-text-primary)', transition: 'all 0.3s' }}>
+            {title}
+        </h5>
+    );
 }
 
 function FieldHint({ text, docSlug }) {
     return (
-        <div className="fd-hint">
+        <div style={{ fontSize: '0.8rem', color: 'var(--app-text-muted)', marginBottom: '8px' }}>
             {text}
             {docSlug && (
                 <a
                     href={`${BASE_DOCS_URL}${docSlug}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="fd-docs-link"
+                    className="text-decoration-none ms-1"
+                    style={{ color: 'var(--app-primary-accent)', fontSize: '0.75rem' }}
                     title="View documentation"
                 >
                     ⓘ
@@ -138,12 +143,12 @@ function FieldHint({ text, docSlug }) {
 function NumberField({ field, value, onChange, hasError }) {
     const { key, label, hint, docSlug, required, min, max, step, unit } = field;
     return (
-        <div className="fd-field-group">
-            <label htmlFor={key} className="fd-label">
-                {label}{required && <span className="fd-required-star"> *</span>}
+        <div className="mb-4">
+            <label htmlFor={key} className="fw-bold mb-1 d-block" style={{ fontSize: '0.9rem', color: 'var(--app-text-secondary)', transition: 'color 0.3s' }}>
+                {label}{required && <span className="text-danger"> *</span>}
             </label>
             <FieldHint text={hint} docSlug={docSlug} />
-            <div className={`fd-input-row${hasError ? ' fd-input-row--error' : ''}`}>
+            <div className={`input-group ${hasError ? 'is-invalid' : ''}`}>
                 <input
                     id={key}
                     type="number"
@@ -152,9 +157,13 @@ function NumberField({ field, value, onChange, hasError }) {
                     step={step}
                     value={value}
                     onChange={(e) => onChange(key, e.target.value)}
-                    className="fd-input-inner"
+                    className={`form-control ${hasError ? 'is-invalid' : ''}`}
                 />
-                {unit && <span className="fd-unit">{unit}</span>}
+                {unit && (
+                    <span className="input-group-text border-start-0" style={{ fontSize: '0.8rem', backgroundColor: 'var(--app-input-bg)', borderColor: 'var(--app-input-border)' }}>
+                        {unit}
+                    </span>
+                )}
             </div>
         </div>
     );
@@ -232,7 +241,7 @@ const FinancialData = ({ controller }) => {
     // ── Render ────────────────────────────────────────────────────────────────
 
     return (
-        <div className="fd-wrapper">
+        <div style={{ padding: '24px', color: 'var(--app-text-primary)' }}>
             <SectionHeader title="Financial Parameters" />
 
             {FINANCIAL_FIELDS.map((field) => (
@@ -246,16 +255,22 @@ const FinancialData = ({ controller }) => {
             ))}
 
             {/* ── Buttons ─────────────────────────────────────────────────── */}
-            <div className="fd-btn-row">
+            <div className="d-flex gap-2 mt-4 mb-3">
                 <button
-                    className="fd-btn fd-btn--suggested"
+                    className="btn flex-grow-1"
+                    style={{ backgroundColor: 'var(--app-primary-accent)', color: '#fff', border: '1px solid var(--app-primary-accent)' }}
                     onClick={handleLoadSuggested}
+                    onMouseEnter={(e) => { e.target.style.opacity = '0.9'; }}
+                    onMouseLeave={(e) => { e.target.style.opacity = '1'; }}
                 >
                     Load Suggested Values
                 </button>
                 <button
-                    className="fd-btn fd-btn--clear"
+                    className="btn flex-grow-1"
+                    style={{ backgroundColor: 'var(--app-bg-alt)', color: 'var(--app-text-secondary)', border: '1px solid var(--app-border-mid)' }}
                     onClick={handleClearAll}
+                    onMouseEnter={(e) => { e.target.style.backgroundColor = 'var(--app-border-light)'; e.target.style.color = 'var(--app-text-primary)'; }}
+                    onMouseLeave={(e) => { e.target.style.backgroundColor = 'var(--app-bg-alt)'; e.target.style.color = 'var(--app-text-secondary)'; }}
                 >
                     Clear All
                 </button>
@@ -263,7 +278,7 @@ const FinancialData = ({ controller }) => {
 
             {/* Validation message */}
             {validationMsg && (
-                <div className="fd-error-msg">
+                <div className="alert alert-danger p-2" style={{ fontSize: '0.8rem' }} role="alert">
                     ⚠ {validationMsg}
                 </div>
             )}
