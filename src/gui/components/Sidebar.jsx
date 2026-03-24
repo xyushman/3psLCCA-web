@@ -41,16 +41,16 @@ const TreeNode = ({ label, childrenData, depth, activeNode, setActiveNode }) => 
         setActiveNode(label);
     };
 
-    const nodeBg = isActive ? '#1b4332' : (isHovered ? 'rgba(27, 67, 50, 0.4)' : 'transparent');
-    const nodeColor = isActive ? '#ffffff' : (isHovered ? '#ffffff' : 'var(--app-text-secondary)');
-    const expanderColor = (isActive || isHovered) ? '#ffffff' : 'var(--app-text-muted)';
+    const nodeBg = isActive ? 'rgba(46, 204, 113, 0.15)' : (isHovered ? 'var(--app-bg-alt)' : 'transparent');
+    const nodeColor = isActive ? 'var(--app-text-primary)' : 'var(--app-text-secondary)';
+    const expanderColor = (isActive || isHovered) ? 'var(--app-text-primary)' : 'var(--app-text-muted)';
 
     return (
         <div className="w-100">
             <div 
                 className="d-flex align-items-center py-1 position-relative" 
                 style={{ 
-                    paddingLeft: `${depth * 12 + 8}px`,
+                    paddingLeft: `${depth * 15 + 10}px`,
                     cursor: 'pointer',
                     color: nodeColor,
                     backgroundColor: nodeBg,
@@ -60,6 +60,9 @@ const TreeNode = ({ label, childrenData, depth, activeNode, setActiveNode }) => 
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
+                {isActive && (
+                    <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '3px', backgroundColor: 'var(--app-primary-accent, #2ecc71)' }}></div>
+                )}
                 <span className="d-inline-flex justify-content-center align-items-center me-1" style={{ width: '20px', color: expanderColor, visibility: hasChildren ? 'visible' : 'hidden' }}>
                     {isExpanded ? <FaChevronDown size={10} /> : <FaChevronRight size={10} />}
                 </span>
@@ -96,11 +99,10 @@ const TreeNode = ({ label, childrenData, depth, activeNode, setActiveNode }) => 
     );
 };
 
-const Sidebar = ({ activeNode, setActiveNode, width }) => {
+const Sidebar = ({ activeNode, setActiveNode }) => {
     return (
         <div className="d-flex flex-column sidebar-scrollbar" style={{ 
-            width: `${width}px`, 
-            minWidth: `${width}px`,
+            width: '250px', 
             height: '100%', 
             backgroundColor: 'var(--app-bg-card)', 
             color: 'var(--app-text-primary)', 
@@ -109,7 +111,8 @@ const Sidebar = ({ activeNode, setActiveNode, width }) => {
             fontFamily: '"Segoe UI", system-ui, sans-serif', 
             fontSize: '14px', 
             paddingTop: '10px', 
-            userSelect: 'none'
+            userSelect: 'none', 
+            transition: 'all 0.3s ease' 
         }}>
             <style>{`
                 .sidebar-scrollbar::-webkit-scrollbar { width: 8px; }
