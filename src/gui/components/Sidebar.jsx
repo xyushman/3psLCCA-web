@@ -50,10 +50,18 @@ const TreeNode = ({ label, childrenData, depth, activeNode, setActiveNode }) => 
 
     const handleToggle = (e) => {
         e.stopPropagation();
+
+        let targetNode = label;
         if (hasChildren) {
-            setIsExpanded(!isExpanded);
+            setIsExpanded(true);
+            if (Array.isArray(childrenData) && childrenData.length > 0) {
+                targetNode = childrenData[0];
+            } else if (childrenData && typeof childrenData === 'object' && Object.keys(childrenData).length > 0) {
+                targetNode = Object.keys(childrenData)[0];
+            }
         }
-        setActiveNode(label);
+
+        setActiveNode(targetNode);
     };
 
     const nodeColor = isActive ? 'var(--app-text-primary)' : 'var(--app-text-secondary)';
