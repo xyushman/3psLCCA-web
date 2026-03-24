@@ -1,95 +1,113 @@
-import React, { useState, useEffect } from 'react';
-import { BsStars } from 'react-icons/bs';
+import React, { useState } from 'react';
+import { BsStars, BsHouseDoorFill, BsFileEarmarkPlus, BsFolder2Open } from 'react-icons/bs';
 import { AiOutlineRedo } from 'react-icons/ai';
 import NewProject from './NewProject';
 
-const quotes = [
-    "💡 Small steps today lead to big savings tomorrow.",
-    "📊 Measure twice, cut once and track the cost.",
-    "⚙️ Efficiency is doing things right; effectiveness is doing the right things.",
-    "🧭 Data is the compass, cost is the path.",
-    "📖 Every project tells a story make yours count."
-];
-
 const Homepage = ({ onProjectOpen }) => {
-    const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
     const [showModal, setShowModal] = useState(false);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-        }, 5000); // Change quote every 5 seconds
-
-        return () => clearInterval(interval);
-    }, []);
+    const [activeTab, setActiveTab] = useState('home');
 
     const handleOpenModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 
+    const handleNewProject = () => {
+        setActiveTab('new');
+        handleOpenModal();
+    };
+
     return (
-        <div className="d-flex flex-column" style={{ minHeight: '100vh', backgroundColor: 'var(--app-bg-main)', transition: 'background-color 0.3s ease' }}>
-            {/* Header */}
-            <header className="d-flex justify-content-between align-items-center p-3" style={{ backgroundColor: 'var(--app-bg-card)', transition: 'all 0.3s ease', borderBottom: 'none' }}>
-                <h4 className="m-0 d-flex align-items-center fw-bold" style={{ color: 'var(--app-text-primary)', transition: 'color 0.3s ease' }}>
-                    <BsStars className="me-2" style={{ color: 'var(--app-logo-accent)' }} /> 3psLCCA
-                </h4>
-                <small className="d-flex align-items-center gap-1 text-end" style={{ maxWidth: '60%' }}>
-                    <span style={{ fontSize: '11px', fontStyle: 'italic', transition: 'all 0.5s ease-in-out', color: 'var(--app-text-secondary)', whiteSpace: 'normal', lineHeight: '1.2' }}>
-                        "{quotes[currentQuoteIndex]}"
-                    </span>
-                </small>
-            </header>
+        <div className="d-flex" style={{ height: '100vh', backgroundColor: 'var(--app-bg-main)', transition: 'background-color 0.3s ease', overflow: 'hidden' }}>
+            
+            {/* Left Sidebar */}
+            <div className="d-flex flex-column align-items-center py-4" style={{ width: '80px', backgroundColor: 'var(--app-bg-card)', borderRight: '1px solid var(--app-border-light)', flexShrink: 0, zIndex: 10 }}>
+                {/* Home Icon */}
+                <div 
+                    className="d-flex flex-column align-items-center mb-4" 
+                    style={{ cursor: 'pointer', color: activeTab === 'home' ? '#9ACD32' : 'var(--app-text-muted)', transition: 'color 0.2s' }}
+                    onClick={() => setActiveTab('home')}
+                >
+                    <BsHouseDoorFill size={22} className="mb-2" />
+                    <span style={{ fontSize: '11px', fontWeight: activeTab === 'home' ? '600' : 'normal' }}>Home</span>
+                </div>
+                
+                {/* New Project Icon */}
+                <div 
+                    className="d-flex flex-column align-items-center mb-4" 
+                    style={{ cursor: 'pointer', color: activeTab === 'new' ? '#9ACD32' : 'var(--app-text-muted)', transition: 'color 0.2s' }}
+                    onClick={handleNewProject}
+                >
+                    <BsFileEarmarkPlus size={22} className="mb-2" />
+                    <span style={{ fontSize: '11px', fontWeight: activeTab === 'new' ? '600' : 'normal' }}>New</span>
+                </div>
 
-            {/* Main Content */}
-            <main className="flex-grow-1 d-flex justify-content-center align-items-center py-2" style={{ overflow: 'hidden' }}>
-                <div style={{ width: '100%', maxWidth: '550px' }}>
+                {/* Open Project Icon */}
+                <div 
+                    className="d-flex flex-column align-items-center" 
+                    style={{ cursor: 'pointer', color: activeTab === 'open' ? '#9ACD32' : 'var(--app-text-muted)', transition: 'color 0.2s' }}
+                    onClick={() => {
+                        setActiveTab('open');
+                        onProjectOpen();
+                    }}
+                >
+                    <BsFolder2Open size={22} className="mb-2" />
+                    <span style={{ fontSize: '11px', fontWeight: activeTab === 'open' ? '600' : 'normal' }}>Open</span>
+                </div>
+            </div>
 
-                    {/* Start Section */}
-                    <div className="mb-3">
-                        <h6 className="fw-bold mb-2" style={{ fontSize: '0.8rem', color: 'var(--app-text-muted)' }}>START</h6>
-                        <button
-                            className="btn w-100 py-2 d-flex justify-content-center align-items-center"
-                            style={{ backgroundColor: 'var(--app-bg-card)', color: 'var(--app-text-primary)', border: '1px solid var(--app-primary-accent)', borderRadius: '4px', fontSize: '0.9rem', transition: 'all 0.3s ease' }}
-                            onClick={handleOpenModal}
-                        >
-                            + New Project
-                        </button>
+            {/* Main Area */}
+            <div className="flex-grow-1 d-flex flex-column" style={{ overflow: 'hidden' }}>
+                
+                {/* Header */}
+                <header className="d-flex justify-content-between align-items-center px-4 py-3" style={{ borderBottom: '1px solid var(--app-border-light)' }}>
+                    <h5 className="m-0 text-white fw-light" style={{ color: 'var(--app-text-primary)' }}>
+                        Good evening, <span style={{ color: '#9ACD32', fontWeight: 'bold' }}>Ritik!</span>
+                    </h5>
+                    <button 
+                        className="btn btn-sm d-flex align-items-center gap-2" 
+                        style={{ backgroundColor: 'transparent', color: 'var(--app-text-secondary)', border: '1px solid var(--app-border-light)' }}
+                    >
+                        <AiOutlineRedo size={14} /> Refresh
+                    </button>
+                </header>
+
+                {/* Content */}
+                <main className="flex-grow-1 px-4 py-4" style={{ overflowY: 'auto' }}>
+                    
+                    {/* Projects Header & Filters */}
+                    <div className="d-flex justify-content-between align-items-center mb-4 text-nowrap">
+                        <h6 className="m-0 fw-bold flex-grow-1 text-uppercase" style={{ fontSize: '0.8rem', color: 'var(--app-text-muted)', letterSpacing: '1.5px' }}>
+                            RECENT PROJECTS
+                        </h6>
+                        
+                        <div className="d-flex align-items-center gap-2">
+                            <input 
+                                type="text" 
+                                placeholder="Search projects..." 
+                                className="form-control form-control-sm me-2"
+                                style={{
+                                    backgroundColor: 'var(--app-input-bg, #2c2f33)', 
+                                    border: '1px solid var(--app-input-border, #444)', 
+                                    color: 'var(--app-text-primary)',
+                                    width: '250px'
+                                }}
+                            />
+                            <button className="btn btn-sm px-3 border-0" style={{ backgroundColor: '#9ACD32', color: '#000', fontWeight: 'bold' }}>Recent</button>
+                            <button className="btn btn-sm px-3 border" style={{ backgroundColor: 'transparent', color: 'var(--app-text-secondary)', borderColor: 'var(--app-border-light)' }}>Name</button>
+                            <button className="btn btn-sm px-3 border" style={{ backgroundColor: 'transparent', color: 'var(--app-text-secondary)', borderColor: 'var(--app-border-light)' }}>Pinned</button>
+                        </div>
                     </div>
 
-                    <hr className="mb-3" style={{ borderTop: '1px solid var(--app-border-dark)' }} />
-
-                    {/* Projects Section */}
-                    <div>
-                        <div className="d-flex justify-content-between align-items-center mb-2">
-                            <h6 className="fw-bold m-0" style={{ fontSize: '0.8rem', color: 'var(--app-text-muted)' }}>PROJECTS</h6>
-                            <button className="btn btn-sm border p-0 d-flex align-items-center justify-content-center" style={{ width: '28px', height: '28px', borderRadius: '4px', backgroundColor: 'var(--app-bg-card)', borderColor: 'var(--app-border-light)' }}>
-                                <AiOutlineRedo size={14} color="var(--app-text-secondary)" />
-                            </button>
+                    {/* Projects List (Empty State Placeholder) */}
+                    <div className="d-flex flex-column align-items-center justify-content-center p-5" style={{ minHeight: '300px', backgroundColor: 'var(--app-bg-card)', borderRadius: '6px', border: '1px dashed var(--app-border-light)' }}>
+                        <BsStars size={28} className="mb-3" style={{ color: 'var(--app-logo-accent, #9ACD32)' }} />
+                        <h5 style={{ color: 'var(--app-text-primary)', fontWeight: 'normal' }}>No projects available</h5>
+                        <div style={{ fontSize: '0.9rem', color: 'var(--app-text-secondary)' }}>
+                            Click 'New' to create your first project.
                         </div>
-
-                        <div className="border text-center mb-3" style={{ backgroundColor: 'var(--app-bg-card)', minHeight: '260px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', borderRadius: '4px', borderColor: 'var(--app-border-light)', transition: 'all 0.3s ease' }}>
-                            <div style={{ fontSize: '0.9rem', color: 'var(--app-text-muted)' }}>
-                                <BsStars className="me-2" style={{ color: 'var(--app-logo-accent)' }} /> Click '+ New Project' above to create your first project.<br />
-                                Your projects will appear here once you create them.
-                            </div>
-                        </div>
-
-                        <div className="d-flex justify-content-center gap-3 mb-3">
-                            <button className="btn border flex-grow-1 py-1" onClick={onProjectOpen} style={{ backgroundColor: 'var(--app-bg-card)', fontSize: '0.9rem', color: 'var(--app-text-primary)', borderRadius: '4px', borderColor: 'var(--app-border-light)', transition: 'all 0.3s' }}>Open</button>
-                            <button className="btn border flex-grow-1 py-1" style={{ backgroundColor: 'var(--app-bg-card)', fontSize: '0.9rem', color: 'var(--app-text-primary)', borderRadius: '4px', borderColor: 'var(--app-border-light)', transition: 'all 0.3s' }}>Delete</button>
-                        </div>
-
-                        <hr className="m-0" style={{ borderTop: '1px solid var(--app-border-dark)' }} />
                     </div>
-                </div>
-            </main>
 
-            {/* Footer */}
-            <footer className="p-2" style={{ backgroundColor: 'var(--app-bg-card)', color: 'var(--app-text-secondary)', fontSize: '0.8rem', transition: 'all 0.3s ease', borderTop: 'none' }}>
-                <div className="container-fluid px-2">
-                    3psLCCA • 0.1.0-dev
-                </div>
-            </footer>
+                </main>
+            </div>
 
             {/* New Project Modal */}
             <NewProject show={showModal} handleClose={handleCloseModal} onProjectOpen={onProjectOpen} />

@@ -95,7 +95,7 @@ const Loginpage = ({ onLogin, onGuestLogin }) => {
                                 <Button 
                                     type="submit" 
                                     className="w-100 py-2 fw-bold mb-3 border-0" 
-                                    style={{ backgroundColor: 'var(--app-btn-primary-bg)', color: 'var(--app-btn-primary-text)', fontSize: '0.9rem', letterSpacing: '0.5px', borderRadius: '4px' }}
+                                    style={{ backgroundColor: '#9ACD32', color: 'var(--app-btn-primary-text)', fontSize: '0.9rem', letterSpacing: '0.5px', borderRadius: '4px' }}
                                 >
                                     LOGIN
                                 </Button>

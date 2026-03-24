@@ -160,9 +160,11 @@ code {
   border-color: var(--app-border-mid);
   transition: all 0.3s ease;
 }
+
 .modal-header {
   border-bottom-color: var(--app-border-light);
 }
+
 .modal-footer {
   border-top-color: var(--app-border-light);
 }
