@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
+import SaveCheckpointModal from './SaveCheckpointModal';
+import CheckpointManagerModal from './CheckpointManagerModal';
 
-const NavItemLink = ({ href, children }) => {
+const NavItemLink = ({ href, children, onClick }) => {
     const [hover, setHover] = useState(false);
     return (
         <Nav.Link 
@@ -15,6 +17,7 @@ const NavItemLink = ({ href, children }) => {
             }}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
+            onClick={onClick}
         >
             {children}
         </Nav.Link>
@@ -55,9 +58,9 @@ const CustomDropdown = ({ title, id, items }) => {
 
 const CustomNavBtn = ({ variant, outlineColor, outlineHoverBg, children, ...props }) => {
     const [hover, setHover] = useState(false);
-    const borderCol = hover ? 'var(--app-primary-accent)' : outlineColor;
+    const borderCol = hover ? '#9adc32' : outlineColor;
     const bgCol = hover ? outlineHoverBg : 'transparent';
-    const textCol = hover ? 'var(--app-text-primary)' : 'var(--app-text-secondary)';
+    const textCol = hover ? '#9adc32' : 'var(--app-text-secondary)';
 
     return (
         <Button 
@@ -80,7 +83,15 @@ const CustomNavBtn = ({ variant, outlineColor, outlineHoverBg, children, ...prop
     );
 };
 
-const ProjectNavbar = () => {
+const ProjectNavbar = ({ onBackToHome, setActiveNode, onSaveCheckpoint, onDeleteCheckpoint, checkpoints, addLog }) => {
+    const [showSaveModal, setShowSaveModal] = useState(false);
+    const [showManagerModal, setShowManagerModal] = useState(false);
+
+    const handleRestoreCheckpoint = (cp) => {
+        alert(`Restoring checkpoint: "${cp.label}"\n(This would typically replace current project data with the snapshot)`);
+        addLog(`Restore initiated for checkpoint: '${cp.label}'.`);
+    };
+
     return (
         <Navbar expand="lg" className="px-3 border-bottom custom-project-nav" style={{ 
             backgroundColor: 'var(--app-bg-card)', 
@@ -90,13 +101,13 @@ const ProjectNavbar = () => {
         }}>
             <style>{`
                 .custom-project-nav .nav-link { color: var(--app-text-primary) !important; font-size: 14px; }
-                .custom-dropdown-item:hover, .custom-dropdown-item:focus { background-color: var(--app-bg-main) !important; color: var(--app-primary-accent) !important; }
+                .custom-dropdown-item:hover, .custom-dropdown-item:focus { background-color: var(--app-bg-main) !important; color: #9adc32 !important; }
                 .custom-project-nav .dropdown-menu { background-color: var(--app-bg-card); border: 1px solid var(--app-border-mid); }
                 .custom-project-nav .dropdown-toggle { color: var(--app-text-primary) !important; font-size: 14px; }
             `}</style>
             
             <Nav className="me-auto align-items-center">
-                <NavItemLink href="#home">Home</NavItemLink>
+                <NavItemLink href="#home" onClick={onBackToHome}>Home</NavItemLink>
                 
                 <CustomDropdown 
                     title="File" 
@@ -130,27 +141,68 @@ const ProjectNavbar = () => {
                 />
 
                 <NavItemLink href="#tutorials">Tutorials</NavItemLink>
-                <NavItemLink href="#logs">Logs</NavItemLink>
+                <NavItemLink href="#logs" onClick={() => setActiveNode('Logs')}>Logs</NavItemLink>
             </Nav>
 
             <Nav className="ms-auto align-items-center column-gap-3">
-                <span className="me-2" style={{ color: 'var(--app-text-muted)', fontSize: '13px' }}>All changes saved</span>
-                <CustomNavBtn variant="outline-secondary" outlineColor="var(--app-border-dark)" outlineHoverBg="var(--app-bg-alt)">Save Checkpoint</CustomNavBtn>
-                <CustomNavBtn variant="outline-secondary" outlineColor="var(--app-border-dark)" outlineHoverBg="var(--app-bg-alt)">Checkpoints</CustomNavBtn>
+                <span className="me-2" style={{ color: '#9adc32', fontSize: '13px' }}>All changes saved</span>
+                <CustomNavBtn 
+                    variant="outline-secondary" 
+                    outlineColor="var(--app-border-dark)" 
+                    outlineHoverBg="var(--app-bg-alt)"
+                    onClick={() => setShowSaveModal(true)}
+                >
+                    Save Checkpoint
+                </CustomNavBtn>
+                <CustomNavBtn 
+                    variant="outline-secondary" 
+                    outlineColor="var(--app-border-dark)" 
+                    outlineHoverBg="var(--app-bg-alt)"
+                    onClick={() => {
+                        setShowManagerModal(true);
+                        addLog("Opened Checkpoint Manager.");
+                    }}
+                >
+                    Checkpoints
+                </CustomNavBtn>
                 
                 <Button 
                     variant="outline-secondary" 
                     size="sm" 
                     className="calc-btn mx-1"
                     style={{ fontSize: '13px', padding: '4px 12px', transition: 'all 0.2s', borderColor: 'var(--app-border-dark)', color: 'var(--app-text-secondary)', backgroundColor: 'transparent' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--app-primary-accent)'; e.currentTarget.style.borderColor = 'var(--app-primary-accent)'; e.currentTarget.style.color = '#fff'; }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#9adc32'; e.currentTarget.style.borderColor = '#9adc32'; e.currentTarget.style.color = '#000'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = 'var(--app-border-dark)'; e.currentTarget.style.color = 'var(--app-text-secondary)'; }}
+                    onClick={() => {
+                        addLog("Calculation request initiated...");
+                        setTimeout(() => addLog("Calculation engine: processing LCCA data models."), 300);
+                        setTimeout(() => addLog("Calculation success: output matrices generated."), 1200);
+                        setActiveNode('Outputs');
+                    }}
                 >
                     Calculate
                 </Button>
                 
                 <CustomNavBtn variant="outline-secondary" outlineColor="var(--app-border-dark)" outlineHoverBg="var(--app-bg-alt)">Lock</CustomNavBtn>
             </Nav>
+
+            <SaveCheckpointModal 
+                show={showSaveModal} 
+                onHide={() => setShowSaveModal(false)} 
+                onSave={onSaveCheckpoint}
+            />
+
+            <CheckpointManagerModal 
+                show={showManagerModal}
+                onHide={() => setShowManagerModal(false)}
+                checkpoints={checkpoints || []}
+                onDelete={onDeleteCheckpoint}
+                onRestore={handleRestoreCheckpoint}
+                onAddNew={() => {
+                    setShowManagerModal(false);
+                    setShowSaveModal(true);
+                }}
+            />
         </Navbar>
     );
 };
