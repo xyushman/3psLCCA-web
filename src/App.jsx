@@ -18,15 +18,17 @@ function App() {
   const [activeNode, setActiveNode] = useState('General Information')
   const [checkpoints, setCheckpoints] = useState([])
   const [logs, setLogs] = useState([])
+  const [userName, setUserName] = useState('')
 
   const addLog = (message) => {
     const time = new Date().toTimeString().split(' ')[0]
     setLogs(prev => [...prev, `[${time}] ${message}`])
   }
 
-  const handleLogin = (isGuest = false) => {
+  const handleLogin = (isGuest = false, name = "Admin") => {
     setIsLoggedIn(true)
-    addLog(isGuest ? "Guest user logged in." : "User 'Admin' logged in.")
+    setUserName(name)
+    addLog(isGuest ? `Guest user '${name}' logged in.` : `User '${name}' logged in.`)
   }
 
   const handleProjectOpen = () => {
@@ -62,7 +64,7 @@ function App() {
     'Financial Data': <FinancialData />,
     'Traffic Data': <TrafficData />,
     'Construction Work Data': <ConstructionWorkData setActiveNode={setActiveNode} />,
-    'Foundation':    <ConstructionWorkData setActiveNode={setActiveNode} />,
+    'Foundation': <ConstructionWorkData setActiveNode={setActiveNode} />,
     'Sub Structure': <ConstructionWorkData initialTab="SubStructure" setActiveNode={setActiveNode} />,
     'Super Structure': <ConstructionWorkData initialTab="SuperStructure" setActiveNode={setActiveNode} />,
     'Miscellaneous': <ConstructionWorkData initialTab="Miscellaneous" setActiveNode={setActiveNode} />,
@@ -77,15 +79,19 @@ function App() {
   }
 
   if (!isLoggedIn) {
-    return <Loginpage onLogin={() => handleLogin(false)} onGuestLogin={() => handleLogin(true)} />
+    const handleAdminLogin = (credentials) => {
+      const namePart = credentials.email ? credentials.email.split('@')[0] : 'Admin';
+      handleLogin(false, namePart);
+    };
+    return <Loginpage onLogin={handleAdminLogin} onGuestLogin={(name) => handleLogin(true, name || 'Guest')} />
   }
 
   if (isProjectOpen) {
     const content = CONTENT_MAP[activeNode] || null
     return (
-      <ProjectLayout 
-        activeNode={activeNode} 
-        setActiveNode={handleSetActiveNode} 
+      <ProjectLayout
+        activeNode={activeNode}
+        setActiveNode={handleSetActiveNode}
         onBackToHome={() => {
           setIsProjectOpen(false)
           addLog("Project closed. Returning to home.")
@@ -95,9 +101,9 @@ function App() {
         onDeleteCheckpoint={handleDeleteCheckpoint}
         addLog={addLog}
       >
-        {React.cloneElement(content, { 
-          checkpoints, 
-          logs, 
+        {React.cloneElement(content, {
+          checkpoints,
+          logs,
           onClearLogs: handleClearLogs
         })}
       </ProjectLayout>
@@ -105,7 +111,7 @@ function App() {
   }
 
   return (
-    <HomePage onProjectOpen={handleProjectOpen} />
+    <HomePage onProjectOpen={handleProjectOpen} userName={userName} />
   )
 }
 
